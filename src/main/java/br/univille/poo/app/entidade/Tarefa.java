@@ -40,10 +40,10 @@ public class Tarefa {
 
     @Override
     public String toString() {
-        return  "id=" + id +
-                ", descricao='" + descricao + '\'' +
-                ", prioridade='" + prioridade + '\'' +
-                ", concluido=" + concluido;
+        return  "id= " + id +
+                ", descricao= '" + descricao + '\'' +
+                ", prioridade= '" + prioridade + '\'' +
+                ", concluido= " + concluido;
     }
 
 }

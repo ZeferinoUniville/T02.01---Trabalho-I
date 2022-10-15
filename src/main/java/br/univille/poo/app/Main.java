@@ -1,12 +1,17 @@
 package br.univille.poo.app;
 
 import java.util.Scanner;
+
+import br.univille.poo.app.entidade.Lista;
 import br.univille.poo.app.entidade.Tarefa;
 import br.univille.poo.app.persistencia.CriarTabelas;
 import br.univille.poo.app.servico.ConcluirTarefa;
+import br.univille.poo.app.servico.CriarLista;
 import br.univille.poo.app.servico.CriarTarefa;
+import br.univille.poo.app.servico.ListarListas;
 import br.univille.poo.app.servico.ListarTarefas;
 import br.univille.poo.app.servico.PriorizarTarefa;
+import br.univille.poo.app.servico.VincularTarefa;
 
 public class Main {
 
@@ -94,6 +99,49 @@ public class Main {
         PriorizarTarefa priorizarTarefa = new PriorizarTarefa();
         try {
           priorizarTarefa.priorizar(escolha,nvlPriori);
+        }catch (Exception e){
+          e.printStackTrace();
+        }
+        System.out.println(" Tarefa Priorizada com sucesso !!! \n");
+
+      }else if(resource == 5){
+
+        System.out.print("Qual seria o nome da lista que deseja criar? ");
+        Scanner teclado2 = new Scanner(System.in);
+        String listaName = teclado2.nextLine();
+
+        Lista lista = new Lista();
+        lista.setLista_name(listaName);
+
+        CriarLista criarLista = new CriarLista();
+        try {
+          criarLista.criar(listaName);
+        }catch (Exception e){
+          e.printStackTrace();
+        }
+        System.out.println(" Lista Criada com sucesso !!! \n");
+
+      }else if(resource == 6){
+
+        System.out.println("Qual seria a tarefa que deseja Adicionar a lista? (escolha pelo ID da tarefa) \n");
+        ListarTarefas listarTarefas = new ListarTarefas();
+        for(Tarefa t : listarTarefas.obterTodos()){
+          System.out.println(t);
+        }
+        Scanner teclado2 = new Scanner(System.in);
+        Integer tarefaId = teclado2.nextInt();
+
+        System.out.println("\n\n Em qual lista deseja adicionar a tarefa? (escolha pelo ID da lista) \n");
+        ListarListas listarListas = new ListarListas();
+        for(Lista l : listarListas.obterTodos()){
+          System.out.println(l);
+        }
+        Scanner teclado3 = new Scanner(System.in);
+        Integer listaId = teclado3.nextInt();
+
+        VincularTarefa vincularTarefa = new VincularTarefa();
+        try {
+          vincularTarefa.vincular(tarefaId,listaId);
         }catch (Exception e){
           e.printStackTrace();
         }

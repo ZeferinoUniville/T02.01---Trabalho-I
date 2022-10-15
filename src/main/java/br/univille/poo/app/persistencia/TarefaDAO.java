@@ -1,5 +1,6 @@
 package br.univille.poo.app.persistencia;
 
+import br.univille.poo.app.entidade.Lista;
 import br.univille.poo.app.entidade.Tarefa;
 
 import java.sql.Connection;
@@ -72,4 +73,43 @@ public class TarefaDAO extends BaseDAO{
         return lista;
     }
 
+    public void vincular(Integer idTarefa, Integer idLista) {
+        Tarefa tarefa = new Tarefa();
+        String sql1 = "select id, descricao, concluido, prioridade from tarefa where id = ?";
+        try(Connection c = obterConexao();
+            PreparedStatement p = c.prepareStatement(sql1)){
+            p.setInt(1,idTarefa);
+            ResultSet resultSetTarefa = p.executeQuery();
+            tarefa.setId(resultSetTarefa.getInt("id"));
+            tarefa.setConcluido(resultSetTarefa.getBoolean("concluido"));
+            tarefa.setDescricao(resultSetTarefa.getString("descricao"));
+            tarefa.setPrioridade(resultSetTarefa.getString("prioridade"));
+        }catch (SQLException e){
+            System.out.println("Erro ao inserir tarefa ");
+            e.printStackTrace();
+        }
+
+        Lista lista = new Lista();
+        String sql2 = "select Lista_id, Lista_name from Lista where Lista_id = ?";
+        try(Connection c = obterConexao();
+            PreparedStatement ps = c.prepareStatement(sql2)){
+            ps.setInt(1,idLista);
+            ResultSet resultSetLista = ps.executeQuery();
+            lista.setLista_id(resultSetLista.getInt("Lista_id"));
+            lista.setLista_name(resultSetLista.getString("Lista_name"));
+        }catch (SQLException e){
+            System.out.println("Erro ao inserir tarefa ");
+            e.printStackTrace();
+        }
+
+        String sql = "update lista set tarefas = tarefas+"+tarefa.getDescricao()+" where id = ?";
+        try(Connection c = obterConexao();
+            PreparedStatement p = c.prepareStatement(sql)){
+            p.setInt(1,idTarefa);
+            p.execute();
+        }catch (SQLException e){
+            System.out.println("Erro ao inserir tarefa ");
+            e.printStackTrace();
+        }
+    }
 }
